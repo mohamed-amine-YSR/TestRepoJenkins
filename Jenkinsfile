@@ -4,15 +4,15 @@ pipeline{
 	//agent{docker {image 'maven:3.6.3'} }
 
 	environment{
-		dockerHome = tool 'myDocker'
-		mavenHome = tool 'myMaven'
+		dockerHome = tool 'MyDOCKER'
+		mavenHome = tool 'MyMAVEN'
 		PATH = "$dockerHome/bin:$PATH"
 	}
 	stages{
 		//CheckOut stage
 		stage('CheckOut'){
 			steps{
-				withMaven(maven : 'myMaven') {
+				withMaven(maven : 'MyMAVEN') {
 						bat 'mvn --version'
 				}
 				//bat 'mvn --version'
@@ -30,7 +30,7 @@ pipeline{
 		//Compile Stage
 		stage('Compile'){
 			steps{
-				withMaven(maven: 'myMaven'){
+				withMaven(maven: 'MyMAVEN'){
 					bat 'mvn compile'
 				}
 			}
@@ -38,7 +38,7 @@ pipeline{
 		//Integration test stage
 		stage('Integration Test'){
 			steps{
-				withMaven(maven: 'myMaven'){
+				withMaven(maven: 'MyMAVEN'){
 					bat 'mvn failsafe:integration-test failsafe:verify'
 				}
 			}
@@ -47,7 +47,7 @@ pipeline{
 		//Packaging stage
 		stage('Package'){
 			steps{
-				withMaven(maven:'myMaven'){
+				withMaven(maven:'MyMAVEN'){
 					bat 'mvn package -DskipTests'
 				}
 			}
@@ -57,7 +57,7 @@ pipeline{
 		stage('Build docker Image'){
 			steps{
 				script{
-					dockerImage = docker.build("oncobe/currency-exchange-devops:${env.BUILD_TAG}")
+					dockerImage = docker.build("medamineysr/currency-exchange-devops:${env.BUILD_TAG}")
 				}
 			}
 		}
@@ -66,7 +66,7 @@ pipeline{
 		stage('Push Docker Image'){
 			steps{
 				script{
-					docker.withRegistry('', 'dockerhub'){
+					docker.withRegistry('', 'ID_DOCKER'){
 						dockerImage.push();
 						dockerImage.push('latest');
 					}
