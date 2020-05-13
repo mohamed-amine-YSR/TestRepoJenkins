@@ -80,7 +80,7 @@ pipeline{
 		}
 		success {
 			echo 'The service is running: Success'
-			slackSend botUser: true, channel: 'utilisation-de-lapproche-devops-dans-les-projets-web', color: '#00ff00', message: 'The service is running: Success', tokenCredentialId: 'slack-token'
+			slackSend channel: 'utilisation-de-lapproche-devops-dans-les-projets-web', color: '#00ff00', message: 'The service is running: Success', tokenCredentialId: 'slack-token'
 		}
 		failure {
 			echo 'The service is running: Failure'
