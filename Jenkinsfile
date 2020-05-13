@@ -24,7 +24,7 @@ pipeline{
 				echo  "JOB name - $env.JOB_NAME"
 				echo  "Build TAGE - $env.BUILD_TAG"
 				echo  "Build url - $env.BUILD_URL"
-				slackSend botUser: true, channel: 'test', color: '#00ff00', message: 'Checkout Step: Success', tokenCredentialId: 'slack-token'
+				slackSend botUser: true, channel: 'test054', color: '#00ff00', message: 'Checkout Step: Success', tokenCredentialId: 'slack-token'
 			}
 		}
 
@@ -34,7 +34,7 @@ pipeline{
 				withMaven(maven: 'MyMAVEN'){
 					bat 'mvn compile'
 				}
-				slackSend botUser: true, channel: 'test', color: '#00ff00', message: 'Compile Step: Success', tokenCredentialId: 'slack-token'
+				slackSend botUser: true, channel: 'test054', color: '#00ff00', message: 'Compile Step: Success', tokenCredentialId: 'slack-token'
 			}
 		}
 		//Integration test stage
@@ -43,7 +43,7 @@ pipeline{
 				withMaven(maven: 'MyMAVEN'){
 					bat 'mvn failsafe:integration-test failsafe:verify'
 				}
-			slackSend botUser: true, channel: 'test', color: '#00ff00', message: 'Integration Test Step: Success', tokenCredentialId: 'slack-token'
+			slackSend botUser: true, channel: 'test054', color: '#00ff00', message: 'Integration Test Step: Success', tokenCredentialId: 'slack-token'
 			}
 		}
 		
@@ -53,7 +53,7 @@ pipeline{
 				withMaven(maven:'MyMAVEN'){
 					bat 'mvn package -DskipTests'
 				}
-				slackSend botUser: true, channel: 'test', color: '#00ff00', message: 'Packaging Step: Success', tokenCredentialId: 'slack-token'
+				slackSend botUser: true, channel: 'test054', color: '#00ff00', message: 'Packaging Step: Success', tokenCredentialId: 'slack-token'
 			}
 		}
 
@@ -63,7 +63,7 @@ pipeline{
 				script{
 					dockerImage = docker.build("medamineysr/currency-exchange-devops:${env.BUILD_TAG}")
 				}
-				slackSend botUser: true, channel: 'test', color: '#00ff00', message: 'Build Docker image Step: Success', tokenCredentialId: 'slack-token'
+				slackSend botUser: true, channel: 'test054', color: '#00ff00', message: 'Build Docker image Step: Success', tokenCredentialId: 'slack-token'
 			}
 		}
 
@@ -76,7 +76,7 @@ pipeline{
 						dockerImage.push('latest');
 					}
 				}
-				slackSend botUser: true, channel: 'test', color: '#00ff00', message: 'Push Docker image Step: Success', tokenCredentialId: 'slack-token'
+				slackSend botUser: true, channel: 'test054', color: '#00ff00', message: 'Push Docker image Step: Success', tokenCredentialId: 'slack-token'
 			}
 		}
 	} 
@@ -86,7 +86,7 @@ pipeline{
 		}
 		success {
 			echo 'The service is running: Success'
-			slackSend botUser: true, channel: 'test', color: '#00ff00', message: 'The service is running: Success', tokenCredentialId: 'slack-token'
+			slackSend botUser: true, channel: 'test054', color: '#00ff00', message: 'The service is running: Success', tokenCredentialId: 'slack-token'
 		}
 		failure {
 			echo 'The service is running: Failure'
