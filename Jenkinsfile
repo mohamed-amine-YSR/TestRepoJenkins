@@ -1,6 +1,6 @@
 // pipline declarative syntaxes
 pipeline{
-	slackSend botUser: true, channel: 'project1', color: '#0000ff', message: '__________ New COMMIT => Build Start __________', tokenCredentialId: 'slack-token'
+	
 	agent any
 	//agent{docker {image 'maven:3.6.3'} }
 
@@ -13,7 +13,9 @@ pipeline{
 		//CheckOut stage
 		stage('CheckOut'){
 			steps{
+				script {
 				try {
+					slackSend botUser: true, channel: 'project1', color: '#0000ff', message: '__________ New COMMIT => Build Start __________', tokenCredentialId: 'slack-token'
 					withMaven(maven : 'MyMAVEN') {
 						bat 'mvn --version'
 					}
@@ -31,7 +33,7 @@ pipeline{
 				    catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Checkout Step: Failure', tokenCredentialId: 'slack-token'
 				    }
-				
+				}
 				
 			}
 		}
@@ -39,6 +41,7 @@ pipeline{
 		//Compile Stage
 		stage('Compile'){
 			steps{
+				script {
 				try {
 					withMaven(maven: 'MyMAVEN'){
 						bat 'mvn compile'
@@ -48,11 +51,13 @@ pipeline{
 				    catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Compile Step: Failure', tokenCredentialId: 'slack-token'
 				    }
+				}
 			}
 		}
 		//Integration test stage
 		stage('Integration Test'){
 			steps{
+				script {
 				try {
 					withMaven(maven: 'MyMAVEN'){
 						bat 'mvn failsafe:integration-test failsafe:verify'
@@ -62,12 +67,14 @@ pipeline{
 				    catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Integration Test Step: Failure', tokenCredentialId: 'slack-token'
 				    }
+				}
 			}
 		}
 		
 		//Packaging stage
 		stage('Package'){
 			steps{
+				script{
 				try {
 					withMaven(maven:'MyMAVEN'){
 						bat 'mvn package -DskipTests'
@@ -77,39 +84,39 @@ pipeline{
 				    catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Packaging Step: Failure', tokenCredentialId: 'slack-token'
 				    }
+				}
 			}
 		}
 
 		//Build docker image
 		stage('Build docker Image'){
 			steps{
+				script{
 				try {
-					script{
-						dockerImage = docker.build("medamineysr/currency-exchange-devops:${env.BUILD_TAG}")
-					}
+					dockerImage = docker.build("medamineysr/currency-exchange-devops:${env.BUILD_TAG}")
 					slackSend botUser: true, channel: 'project1', color: '#00ff00', message: 'Build Docker image Step: Success', tokenCredentialId: 'slack-token'
 				}
-				    catch(all) {
+				catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Build Docker image Step: Failure', tokenCredentialId: 'slack-token'
 				    }
+				}
 			}
 		}
 
 		//Push Docker Image
 		stage('Push Docker Image'){
 			steps{
+				script{
 				try {
-					script{
-						docker.withRegistry('', 'ID_DOCKER'){
-							dockerImage.push();
-							dockerImage.push('latest');
-						}
-					}
+					docker.withRegistry('', 'ID_DOCKER'){
+					dockerImage.push();
+					dockerImage.push('latest');
 					slackSend botUser: true, channel: 'project1', color: '#00ff00', message: 'Push Docker image Step: Success', tokenCredentialId: 'slack-token'
 				}
-				    catch(all) {
+				 catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Push Docker image Step: Failure', tokenCredentialId: 'slack-token'
-				    }
+				   }
+				}
 			}
 		}
 	} 
@@ -120,11 +127,13 @@ pipeline{
 		success {
 			echo 'The service is running: Success'
 			slackSend botUser: true, channel: 'project1', color: '#00ff00', message: 'The service is running: Success', tokenCredentialId: 'slack-token'
+			slackSend botUser: true, channel: 'project1', color: '#0000ff', message: '__________ Build Finish __________', tokenCredentialId: 'slack-token'
 		}
 		failure {
 			echo 'The service is running: Failure'
 			slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'The service is running: Failure', tokenCredentialId: 'slack-token'
+			slackSend botUser: true, channel: 'project1', color: '#0000ff', message: '__________ Build Finish __________', tokenCredentialId: 'slack-token'
 		}
 	}
-	slackSend botUser: true, channel: 'project1', color: '#0000ff', message: '__________ Build Finish __________', tokenCredentialId: 'slack-token'
+	
 }
