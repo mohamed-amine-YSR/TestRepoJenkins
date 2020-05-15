@@ -111,6 +111,7 @@ pipeline{
 					docker.withRegistry('', 'ID_DOCKER'){
 					dockerImage.push();
 					dockerImage.push('latest');
+					}
 					slackSend botUser: true, channel: 'project1', color: '#00ff00', message: 'Push Docker image Step: Success', tokenCredentialId: 'slack-token'
 				}
 				 catch(all) {
