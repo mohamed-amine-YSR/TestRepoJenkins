@@ -32,6 +32,7 @@ pipeline{
 				    }
 				    catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Checkout Step: Failure', tokenCredentialId: 'slack-token'
+				    	error "This pipeline stops here!"
 				    }
 				}
 				
@@ -50,6 +51,7 @@ pipeline{
 				}
 				    catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Compile Step: Failure', tokenCredentialId: 'slack-token'
+				    	error "This pipeline stops here!"
 				    }
 				}
 			}
@@ -66,6 +68,7 @@ pipeline{
 				}
 				    catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Integration Test Step: Failure', tokenCredentialId: 'slack-token'
+				    	error "This pipeline stops here!"
 				    }
 				}
 			}
@@ -83,6 +86,7 @@ pipeline{
 				}
 				    catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Packaging Step: Failure', tokenCredentialId: 'slack-token'
+				    	error "This pipeline stops here!"
 				    }
 				}
 			}
@@ -98,7 +102,8 @@ pipeline{
 				}
 				catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Build Docker image Step: Failure', tokenCredentialId: 'slack-token'
-				    }
+					error "This pipeline stops here!"    
+				   }
 				}
 			}
 		}
@@ -116,7 +121,8 @@ pipeline{
 				}
 				 catch(all) {
 					slackSend botUser: true, channel: 'project1', color: '#ff0000', message: 'Push Docker image Step: Failure', tokenCredentialId: 'slack-token'
-				   }
+				  	error "This pipeline stops here!" 
+				  }
 				}
 			}
 		}
