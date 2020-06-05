@@ -25,7 +25,7 @@ public class CurrencyExchangeController {
 
 	@GetMapping("/")
 	public String imHealthy() {
-		return "{ensimag:true}";
+		return "{ensimag:false}";
 	}
 
 	//http://localhost:8000/currency-exchange/from/USD/to/INR
